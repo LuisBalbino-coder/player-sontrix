@@ -65,8 +65,8 @@ Em desenvolvimento. Novas melhorias e recursos poderão ser adicionados ao longo
 
 ## 👨‍💻 Autor
 
-Desenvolvido por [LuisBalbino-coder](https://github.com/LuisBalbino-coder).
+             Desenvolvido por [LuisBalbino-coder](https://github.com/LuisBalbino-coder).
 
 ---
 
-*Sontrix — Seu espaço, sua música.*
+                            *Sontrix — Seu espaço, sua música.*
