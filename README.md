@@ -23,9 +23,50 @@ O Sontrix permite importar músicas do seu dispositivo, organizar sua biblioteca
 - IndexedDB
 - Service Workers
 - Progressive Web App (PWA)
-- [jsmediatags](https://github.com/aadsm/jsmediatags), para leitura de metadados de arquivos de áudio
+- [jsmediatags](https://github.com/aadsm/jsmediatags), para leitura de metadados de arquivos de áudio.
 
 ## 🚀 Como executar
 
 1. Clone o repositório:
-             git clone https://github.com/LuisBalbino-coder/player-sontrix.git
+
+   ```bash
+   git clone https://github.com/LuisBalbino-coder/player-sontrix.git
+   ```
+
+2. Entre na pasta do projeto:
+
+   ```bash
+   cd player-sontrix
+   ```
+
+3. Inicie um servidor HTTP local com Python 3:
+
+   ```bash
+   python3 -m http.server 8000
+   ```
+
+4. Abra o navegador e acesse:
+
+   http://localhost:8000
+
+## 🔒 Privacidade
+
+A biblioteca de músicas é armazenada localmente no navegador por meio do IndexedDB. Os arquivos de áudio pessoais não precisam ser enviados ao GitHub para utilizar o player.
+
+**Atenção:** os dados ficam associados ao navegador e à origem do site. Limpar os dados do site ou mudar o endereço pode fazer com que a biblioteca não apareça no novo ambiente.
+
+## 📱 Instalação
+
+O Sontrix inclui um manifesto PWA. A instalação depende da publicação em uma origem compatível, normalmente HTTPS, e do suporte do navegador e do dispositivo.
+
+## 📌 Status do projeto
+
+Em desenvolvimento. Novas melhorias e recursos poderão ser adicionados ao longo do tempo.
+
+## 👨‍💻 Autor
+
+Desenvolvido por [LuisBalbino-coder](https://github.com/LuisBalbino-coder).
+
+---
+
+*Sontrix — Seu espaço, sua música.*
