@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sontrix</title>
+
+    <link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#ff3030">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Sontrix">
+<link rel="icon" href="./player.svg" type="image/svg+xml">
+
+    <link rel="stylesheet" href="style.css">
+
+<!-- Biblioteca para ler metadados e capas dos áudios -->
+<script src="./jsmediatags.min.js" defer></script>
+
+<script src="arquivo.js" defer></script>
+</head>
+<body>
+
+    <div class="app">
+
+        <aside class="sidebar">
+            <h1 class="logo">♫ Sontrix</h1>
+
+            <nav>
+                <button class="nav-button">⌂ Início</button>
+                <button class="nav-button">⌕ Buscar</button>
+            </nav>
+
+            <section class="library">
+                <h2>Sua biblioteca</h2>
+                <p>Suas músicas aparecerão aqui.</p>
+                <button id="importar">＋ Adicionar músicas</button>
+                <input
+                    type="file"
+                    id="seletor-musicas"
+                    accept="audio/*"
+                    multiple
+                    hidden
+                >
+            </section>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button id="voltar" aria-label="Voltar">←</button>
+                <button id="avancar" aria-label="Avançar">→</button>
+                <input
+                    type="search"
+                    id="busca"
+                    placeholder="O que você quer ouvir?"
+                >
+            </header>
+
+            <section class="welcome">
+                <p class="eyebrow">SEU ESPAÇO, SUA MÚSICA</p>
+                <h2>Boa noite!</h2>
+                <p>Escolha uma música e aproveite.</p>
+            </section>
+
+            <section class="songs-section">
+                <h2>Suas músicas</h2>
+
+                <div id="lista-musicas" class="song-list">
+                    <p class="empty-message">
+                        Adicione músicas do seu computador para começar.
+                    </p>
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <footer class="player">
+        <div class="current-song">
+            <div class="cover">♫</div>
+            <div class="song-info">
+                <strong id="titulo-atual">Nenhuma música</strong>
+                <span id="artista-atual">Escolha uma faixa</span>
+            </div>
+        </div>
+
+        <div class="player-controls">
+            <div class="buttons">
+                <button id="anterior" aria-label="Música anterior">|◀</button>
+                <button id="play" aria-label="Reproduzir">▶</button>
+                <button id="proxima" aria-label="Próxima música">▶|</button>
+            </div>
+
+            <div class="progress">
+                <span id="tempo-atual">0:00</span>
+                <input
+                    type="range"
+                    id="progresso"
+                    min="0"
+                    max="100"
+                    value="0"
+                >
+                <span id="duracao">0:00</span>
+            </div>
+        </div>
+
+        <div class="volume">
+            <span>🔊</span>
+            <input
+                type="range"
+                id="volume"
+                min="0"
+                max="1"
+                step="0.01"
+                value="0.7"
+                aria-label="Volume"
+            >
+        </div>
+    </footer>
+<input
+    type="file"
+    id="seletor-capa"
+    accept="image/*"
+    hidden
+>
+</body>
+</html>

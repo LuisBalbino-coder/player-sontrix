@@ -1,0 +1,18 @@
+# Arquivos temporários
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# Arquivos de áudio pessoais
+*.mp3
+*.wav
+*.ogg
+*.flac
+*.m4a
+*.aac
+*.opus
+
+# Cópias de segurança locais
+*.backup-*

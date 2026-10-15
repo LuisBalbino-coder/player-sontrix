@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "Sontrix",
+  "short_name": "Sontrix",
+  "description": "Seu espaço pessoal para ouvir músicas",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#121212",
+  "theme_color": "#ff3030",
+  "icons": [
+    {
+      "src": "./icone.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

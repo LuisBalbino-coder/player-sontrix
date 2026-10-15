@@ -1,0 +1,435 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+.app {
+    display: flex;
+    gap: 8px;
+    height: calc(100vh - 96px);
+    padding: 8px;
+}
+
+.sidebar, .main-content {
+    background: #121212;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.sidebar {
+    width: 260px;
+    flex-shrink: 0;
+}
+
+.logo {
+    color: #ff3030;
+    margin-bottom: 30px;
+}
+
+nav {
+    display: grid;
+    gap: 12px;
+}
+
+.nav-button {
+    background: transparent;
+    color: #bbb;
+    text-align: left;
+}
+
+.library {
+    margin-top: 38px;
+}
+
+.library h2, .songs-section h2 {
+    margin-bottom: 16px;
+}
+
+.library p, .welcome > p:last-child {
+    color: #aaa;
+    margin: 12px 0;
+}
+
+#importar {
+    background: white;
+    color: black;
+    padding: 10px 16px;
+    border-radius: 24px;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+}
+
+.topbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.topbar button {
+    background: #080808;
+    color: white;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+}
+
+#busca {
+    background: #242424;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 24px;
+    padding: 12px 16px;
+    width: min(380px, 65%);
+}
+
+.welcome {
+    margin: 55px 0 45px;
+}
+
+.eyebrow {
+    color: #ff3030;
+    letter-spacing: 2px;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+.welcome h2 {
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+.song-list {
+    display: grid;
+    gap: 6px;
+}
+
+.empty-message {
+    color: #aaa;
+    padding: 20px 0;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.song-item:hover {
+    background: #242424;
+}
+
+.song-cover, .cover {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #6b1010, #191919);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    font-size: 24px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.song-cover {
+    width: 48px;
+    height: 48px;
+}
+
+.song-cover-image {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.song-cover {
+    width: 48px;
+    height: 48px;
+}
+
+.song-item strong, .song-item span {
+    display: block;
+}
+
+.song-item span {
+    color: #aaa;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 88px;
+    background: #080808;
+    border-top: 1px solid #222;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 22px;
+}
+
+.current-song {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.cover {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+}
+
+.song-info {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+}
+
+.song-info strong, .song-info span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.song-info strong {
+    font-size: 13px;
+}
+
+.song-info span {
+    color: #aaa;
+    font-size: 11px;
+}
+
+.player-controls {
+    min-width: 0;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 8px;
+}
+
+.buttons button {
+    background: transparent;
+    color: #bbb;
+}
+
+#play {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: white;
+    color: black;
+}
+
+.progress, .volume {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progress {
+    color: #aaa;
+    font-size: 10px;
+}
+
+.progress input {
+    flex: 1;
+    min-width: 0;
+}
+
+input[type="range"] {
+    accent-color: #ff3030;
+    cursor: pointer;
+}
+
+.volume {
+    justify-content: flex-end;
+    color: white;
+}
+
+.volume input {
+    width: 95px;
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        width: 155px;
+        padding: 18px 12px;
+    }
+
+    .main-content {
+        padding: 18px 14px;
+    }
+
+    .player {
+        grid-template-columns: 1fr 1.3fr;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .volume {
+        display: none;
+    }
+
+    .botao-capa {
+    background: #292929;
+    color: #ffffff;
+    border: 1px solid #444444;
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s;
+}
+}
+
+.botao-capa {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 9px 13px;
+    min-width: 100px;
+
+    background: #111111;
+    color: #ffffff;
+
+    border: 1px solid #555555;
+    border-radius: 7px;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+
+    cursor: pointer;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Detalhe inspirado nas listras da camisa */
+.botao-capa::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+
+    background: repeating-linear-gradient(
+        to bottom,
+        #e80505 0px,
+        #ffffff 4px,
+        #777777 4px,
+        #777777 7px
+    );
+}
+
+/* Efeito ao passar o mouse */
+.botao-capa:hover {
+    background: #252525;
+    border-color: #e00b0b;
+    box-shadow: 0 0 10px #ffffff20;
+    transform: translateY(-1px);
+}
+
+/* Efeito ao clicar */
+.botao-capa:active {
+    transform: scale(0.96);
+}
+
+/* Acessibilidade pelo teclado */
+.botao-capa:focus-visible {
+    outline: 2px solid #d80b0b;
+    outline-offset: 3px;
+}
+
+/* Mantém o botão discreto em telas pequenas */
+@media (max-width: 500px) {
+    .botao-capa {
+        min-width: auto;
+        padding: 8px 9px;
+        font-size: 10px;
+    }
+}
+
+
+.botao-remover {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    padding: 9px 12px;
+    border: 1px solid #743030;
+    border-radius: 7px;
+
+    background: #241010;
+    color: #ff7777;
+
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.botao-remover:hover {
+    background: #5a1515;
+    border-color: #ff3030;
+}
+
+.botao-remover:focus-visible {
+    outline: 2px solid #ff3030;
+    outline-offset: 3px;
+}
+
+.song-item .song-info {
+    flex: 1;
+}
+
