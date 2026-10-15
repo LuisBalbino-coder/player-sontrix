@@ -258,7 +258,10 @@ seletor.addEventListener("change", async () => {
         for (const arquivo of arquivos) {
             if (!arquivo.type.startsWith("audio/")) continue;
 
-            const capa = await lerCapa(arquivo);
+            // No Android, evitar ler a capa incorporada ao áudio para reduzir o pico de memória.
+            // O arquivo original continua sendo salvo normalmente no IndexedDB.
+            const dispositivoMovel = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            const capa = dispositivoMovel ? null : await lerCapa(arquivo);
             const id = await salvarArquivo(arquivo, capa);
 
             musicas.push({
