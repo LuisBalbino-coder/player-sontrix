@@ -331,6 +331,7 @@ seletorCapa.addEventListener("change", async () => {
         // Atualiza também a capa do player, se for a música atual.
         if (musicas[musicaAtual]?.id === id) {
             atualizarCapaPlayer(musica);
+    atualizarMidiaDoSistema(musica);
         }
     } catch (erro) {
         console.error("Erro ao salvar a capa:", erro);
@@ -473,6 +474,95 @@ item.append(capa, informacoes, botaoCapa, botaoRemover);
         listaMusicas.appendChild(item);
     });
 }
+
+// Integração com os controles de mídia do Android (tela bloqueada/notificação).
+function atualizarMidiaDoSistema(musica) {
+    if (!("mediaSession" in navigator) || !("MediaMetadata" in window) || !musica) {
+        return;
+    }
+
+    try {
+        const metadados = {
+            title: musica.nome || "Sontrix",
+            artist: "Sontrix",
+            album: "Biblioteca pessoal"
+        };
+
+        if (musica.capaURL) {
+            metadados.artwork = [
+                { src: musica.capaURL, sizes: "512x512", type: musica.capa?.type || "image/jpeg" }
+            ];
+        }
+
+        navigator.mediaSession.metadata = new MediaMetadata(metadados);
+    } catch (erro) {
+        console.warn("Não foi possível atualizar os metadados de mídia:", erro);
+    }
+}
+
+// Registra os botões da notificação/tela bloqueada quando o navegador oferece suporte.
+if ("mediaSession" in navigator) {
+    const acoesMidia = {
+        play: async () => {
+            try {
+                await audio.play();
+                botaoPlay.textContent = "Ⅱ";
+            } catch (erro) {
+                console.warn("Não foi possível retomar a reprodução:", erro);
+            }
+        },
+        pause: () => {
+            audio.pause();
+            botaoPlay.textContent = "▶";
+        },
+        previoustrack: () => {
+            if (musicas.length === 0) return;
+            const anterior = musicaAtual <= 0 ? musicas.length - 1 : musicaAtual - 1;
+            tocarMusica(anterior);
+        },
+        nexttrack: () => {
+            if (musicas.length === 0) return;
+            tocarMusica((musicaAtual + 1) % musicas.length);
+        },
+        seekbackward: (detalhes) => {
+            if (Number.isFinite(audio.duration)) {
+                audio.currentTime = Math.max(0, audio.currentTime - (detalhes.seekOffset || 10));
+            }
+        },
+        seekforward: (detalhes) => {
+            if (Number.isFinite(audio.duration)) {
+                audio.currentTime = Math.min(audio.duration, audio.currentTime + (detalhes.seekOffset || 10));
+            }
+        },
+        seekto: (detalhes) => {
+            if (Number.isFinite(audio.duration) && Number.isFinite(detalhes.seekTime)) {
+                audio.currentTime = Math.max(0, Math.min(audio.duration, detalhes.seekTime));
+            }
+        }
+    };
+
+    for (const [acao, manipulador] of Object.entries(acoesMidia)) {
+        try {
+            navigator.mediaSession.setActionHandler(acao, manipulador);
+        } catch (erro) {
+            // Alguns navegadores não suportam todas as ações de mídia.
+        }
+    }
+}
+
+audio.addEventListener("play", () => {
+    botaoPlay.textContent = "Ⅱ";
+    if ("mediaSession" in navigator && "playbackState" in navigator.mediaSession) {
+        navigator.mediaSession.playbackState = "playing";
+    }
+});
+
+audio.addEventListener("pause", () => {
+    botaoPlay.textContent = "▶";
+    if ("mediaSession" in navigator && "playbackState" in navigator.mediaSession) {
+        navigator.mediaSession.playbackState = "paused";
+    }
+});
 
 // Reproduz uma faixa.
 async function tocarMusica(indice) {
