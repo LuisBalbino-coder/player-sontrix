@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.ScrollView
+import androidx.documentfile.provider.DocumentFile
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.session.MediaController
@@ -70,6 +71,10 @@ class MainActivity : Activity() {
             setOnClickListener { openAudioPicker() }
         })
         root.addView(Button(this).apply {
+            text = "▣ Importar pasta de músicas"
+            setOnClickListener { openFolderPicker() }
+        })
+        root.addView(Button(this).apply {
             text = "⏯ Reproduzir / pausar"
             setOnClickListener {
                 controller?.let { player ->
@@ -111,11 +116,26 @@ class MainActivity : Activity() {
         startActivityForResult(intent, REQUEST_PICK_AUDIO)
     }
 
+    private fun openFolderPicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+        }
+        startActivityForResult(intent, REQUEST_PICK_FOLDER)
+    }
+
     @Deprecated("Uses activity result API for broad Android compatibility")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != REQUEST_PICK_AUDIO || resultCode != RESULT_OK || data == null) return
+        if (resultCode != RESULT_OK || data?.data == null) return
 
+        when (requestCode) {
+            REQUEST_PICK_AUDIO -> importSelectedAudio(data)
+            REQUEST_PICK_FOLDER -> importAudioFolder(data.data!!, data.flags)
+        }
+    }
+
+    private fun importSelectedAudio(data: Intent) {
         val selected = mutableListOf<Uri>()
         data.clipData?.let { clip ->
             for (index in 0 until clip.itemCount) selected.add(clip.getItemAt(index).uri)
@@ -128,12 +148,55 @@ class MainActivity : Activity() {
             } catch (_: SecurityException) {
                 // Alguns provedores não permitem persistir a autorização.
             }
-            val uriText = uri.toString()
-            if (songs.none { it.uri == uriText }) songs.add(Song(uriText, getDisplayName(uri)))
+            addSong(uri)
         }
         saveSongs()
         renderSongs()
-        status.text = "${selected.size} arquivo(s) selecionado(s). Toque em uma faixa para reproduzir."
+        status.text = "${selected.size} arquivo(s) selecionado(s)."
+    }
+
+    private fun importAudioFolder(folderUri: Uri, resultFlags: Int) {
+        val readPermission = resultFlags and Intent.FLAG_GRANT_READ_URI_PERMISSION
+        try {
+            contentResolver.takePersistableUriPermission(folderUri, readPermission)
+        } catch (_: SecurityException) {
+            status.text = "Não foi possível manter acesso à pasta selecionada."
+            return
+        }
+
+        val folder = DocumentFile.fromTreeUri(this, folderUri)
+        if (folder == null || !folder.isDirectory) {
+            status.text = "Não foi possível abrir essa pasta."
+            return
+        }
+
+        val before = songs.size
+        importAudioFilesRecursively(folder)
+        val added = songs.size - before
+        saveSongs()
+        renderSongs()
+        status.text = if (added > 0) {
+            "$added música(s) importada(s) da pasta."
+        } else {
+            "Nenhum arquivo de áudio novo foi encontrado nessa pasta."
+        }
+    }
+
+    private fun importAudioFilesRecursively(directory: DocumentFile) {
+        directory.listFiles().forEach { file ->
+            if (file.isDirectory) {
+                importAudioFilesRecursively(file)
+            } else if (file.isFile && file.type?.startsWith("audio/") == true) {
+                addSong(file.uri)
+            }
+        }
+    }
+
+    private fun addSong(uri: Uri) {
+        val uriText = uri.toString()
+        if (songs.none { it.uri == uriText }) {
+            songs.add(Song(uriText, getDisplayName(uri)))
+        }
     }
 
     private fun getDisplayName(uri: Uri): String {
@@ -209,6 +272,7 @@ class MainActivity : Activity() {
 
     companion object {
         private const val REQUEST_PICK_AUDIO = 1001
+        private const val REQUEST_PICK_FOLDER = 1002
         private const val PREFS = "sontrix_library"
         private const val KEY_SONGS = "songs"
     }
